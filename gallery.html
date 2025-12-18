@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery | Jane Ndila</title>
+    <meta name="description"
+        content="Browse Jane Ndila's photo gallery showcasing events, workshops, and community engagement.">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* Gallery Page Specific Styles */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            aspect-ratio: 4/3;
+            background: linear-gradient(135deg, var(--leafy-green) 0%, var(--gold) 100%);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            padding: 2rem 1.5rem 1.5rem;
+            color: var(--white);
+            transform: translateY(100%);
+            transition: var(--transition);
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            transform: translateY(0);
+        }
+
+        .gallery-overlay h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .gallery-overlay p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Gallery placeholder content */
+        .gallery-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            color: var(--white);
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .gallery-placeholder svg {
+            width: 60px;
+            height: 60px;
+            fill: rgba(255, 255, 255, 0.7);
+            margin-bottom: 1rem;
+        }
+
+        .gallery-placeholder span {
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+
+        /* Gallery Filter */
+        .gallery-filter {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .filter-btn {
+            padding: 0.75rem 1.5rem;
+            background: transparent;
+            border: 2px solid var(--leafy-green);
+            color: var(--leafy-green);
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--leafy-green);
+            color: var(--white);
+        }
+
+        /* Featured gallery item - spans 2 columns */
+        .gallery-item.featured {
+            grid-column: span 2;
+            grid-row: span 2;
+        }
+
+        @media (max-width: 768px) {
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .gallery-item.featured {
+                grid-column: span 1;
+                grid-row: span 1;
+            }
+
+            .gallery-filter {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        /* Lightbox styles */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox-content {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 10px;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 3rem;
+            color: var(--white);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .lightbox-close:hover {
+            color: var(--gold);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar container">
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="about.html" class="nav-link">About</a></li>
+                <li><a href="services.html" class="nav-link">Services</a></li>
+                <li><a href="projects.html" class="nav-link">Projects</a></li>
+                <li><a href="portfolio.html" class="nav-link">Portfolio</a></li>
+                <li><a href="videos.html" class="nav-link">Videos</a></li>
+                <li><a href="gallery.html" class="nav-link active">Gallery</a></li>
+                <li><a href="book.html" class="btn btn-primary">Book A Session</a></li>
+            </ul>
+
+            <div class="hamburger"><svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+                    <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
+                </svg></div>
+        </nav>
+    </header>
+
+    <!-- Gallery Hero Section -->
+    <section class="hero">
+        <div class="hero-image">
+            <img src="images/services.JPG" alt="Jane Ndila - Gallery" class="profile-image">
+        </div>
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1 class="hero-title">Photo <span style="color: var(--gold);">Gallery</span></h1>
+                    <p class="hero-subtitle">Moments & Memories</p>
+                    <p class="hero-description">
+                        A visual journey through events, workshops, and meaningful moments in my professional journey.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Filter Section -->
+    <section class="section">
+        <div class="container">
+            <div class="gallery-filter">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="events">Events</button>
+                <button class="filter-btn" data-filter="workshops">Workshops</button>
+                <button class="filter-btn" data-filter="community">Community</button>
+                <button class="filter-btn" data-filter="professional">Professional</button>
+            </div>
+
+            <div class="gallery-grid">
+                <!-- Gallery Item 1 - Featured -->
+                <div class="gallery-item featured" data-category="events">
+                    <img src="images/gallery/WhatsApp Image 2025-12-18 at 16.25.59.jpeg" alt="Jane Ndila Event">
+                    <div class="gallery-overlay">
+                        <h3>Professional Event</h3>
+                        <p>Engaging with the community</p>
+                    </div>
+                </div>
+
+                <!-- Gallery Item 2 -->
+                <div class="gallery-item" data-category="workshops">
+                    <img src="images/gallery/WhatsApp Image 2025-12-18 at 16.25.57.jpeg" alt="Workshop Session">
+                    <div class="gallery-overlay">
+                        <h3>Workshop Session</h3>
+                        <p>Training and development</p>
+                    </div>
+                </div>
+
+                <!-- Gallery Item 3 -->
+                <div class="gallery-item" data-category="community">
+                    <img src="images/gallery/WhatsApp Image 2025-12-18 at 16.25.58.jpeg" alt="Community Outreach">
+                    <div class="gallery-overlay">
+                        <h3>Community Outreach</h3>
+                        <p>Making a difference</p>
+                    </div>
+                </div>
+
+                <!-- Gallery Item 4 -->
+                <div class="gallery-item" data-category="professional">
+                    <img src="images/gallery/WhatsApp Image 2025-12-18 at 16.25.58 (1).jpeg" alt="Professional Moment">
+                    <div class="gallery-overlay">
+                        <h3>Professional Moment</h3>
+                        <p>Dedication to excellence</p>
+                    </div>
+                </div>
+
+                <!-- Gallery Item 5 -->
+                <div class="gallery-item" data-category="events">
+                    <img src="images/gallery/WhatsApp Image 2025-12-18 at 16.25.59 (1).jpeg" alt="Special Event">
+                    <div class="gallery-overlay">
+                        <h3>Special Event</h3>
+                        <p>Creating memorable moments</p>
+                    </div>
+                </div>
+
+                <!-- Gallery Item 6 -->
+                <div class="gallery-item" data-category="workshops">
+                    <img src="images/gallery/WhatsApp Image 2025-12-18 at 16.26.00.jpeg" alt="Training Workshop">
+                    <div class="gallery-overlay">
+                        <h3>Training Workshop</h3>
+                        <p>Empowering through education</p>
+                    </div>
+                </div>
+
+                <!-- Gallery Item 7 -->
+                <div class="gallery-item" data-category="community">
+                    <img src="images/gallery/WhatsApp Image 2025-12-18 at 16.26.01.jpeg" alt="Community Engagement">
+                    <div class="gallery-overlay">
+                        <h3>Community Engagement</h3>
+                        <p>Building connections</p>
+                    </div>
+                </div>
+
+                <!-- Gallery Item 8 -->
+                <div class="gallery-item" data-category="professional">
+                    <img src="images/gallery/WhatsApp Image 2025-12-18 at 16.26.01 (1).jpeg"
+                        alt="Professional Development">
+                    <div class="gallery-overlay">
+                        <h3>Professional Development</h3>
+                        <p>Continuous growth</p>
+                    </div>
+                </div>
+
+                <!-- Gallery Item 9 -->
+                <div class="gallery-item" data-category="events">
+                    <img src="images/gallery/WhatsApp Image 2025-12-18 at 16.26.02.jpeg" alt="Event Highlight">
+                    <div class="gallery-overlay">
+                        <h3>Event Highlight</h3>
+                        <p>Celebrating achievements</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Be Part of the Journey</h2>
+                <p>Want to attend our next event or workshop? Get in touch and stay connected.</p>
+                <div class="cta-buttons">
+                    <a href="contact.html" class="btn btn-primary">Contact Me</a>
+                    <a href="book.html" class="btn btn-secondary"
+                        style="background: var(--white); color: var(--dark);">Book a Session</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h3>Jane Ndila</h3>
+                    <p>Empowering your mental well-being one session at a time.</p>
+                </div>
+
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <a href="index.html">Home</a>
+                    <a href="about.html">About</a>
+                    <a href="services.html">Services</a>
+                    <a href="projects.html">Projects</a>
+                    <a href="portfolio.html">Portfolio</a>
+                    <a href="videos.html">Videos</a>
+                    <a href="gallery.html">Gallery</a>
+                </div>
+
+                <div class="footer-contact">
+                    <h4>Contact Info</h4>
+                    <p>Email: jandilam77@gmail.com</p>
+                    <p>Phone: +254 721 205 993</p>
+                    <p>Utawala, Nairobi, Kenya.</p>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 Jane Ndila. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox">
+        <span class="lightbox-close">&times;</span>
+        <img src="" alt="" class="lightbox-content" id="lightbox-img">
+    </div>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+    <script>
+        // Gallery Filter
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                // Remove active class from all buttons
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                // Add active class to clicked button
+                this.classList.add('active');
+
+                const filter = this.dataset.filter;
+
+                document.querySelectorAll('.gallery-item').forEach(item => {
+                    if (filter === 'all' || item.dataset.category === filter) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
