@@ -23,6 +23,7 @@ async function loadSiteContent() {
         const { data, error } = await supabaseClient
             .from('site_content')
             .select('content')
+            .order('updated_at', { ascending: false })
             .limit(1);
 
         if (error) throw error;
