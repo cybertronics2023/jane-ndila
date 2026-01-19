@@ -111,22 +111,22 @@ function updateDOM(content) {
     // --- Settings (Contact) ---
     console.log('Checking settings:', content.settings);
     if (content.settings) {
-        console.log('Settings found, contact:', content.settings.contact);
+        console.log('Settings found:', content.settings);
         setText('footer-brand-tagline', content.settings.tagline);
-        if (content.settings.contact) {
-            const email = content.settings.contact.email;
-            const phone = content.settings.contact.phone;
-            const address = content.settings.contact.address;
-            console.log('Contact data:', { email, phone, address });
 
-            setText('contact-email', `Email: ${email}`);
-            setText('contact-phone', `Phone: ${phone}`);
-            setText('contact-address', address);
+        // Get contact info - check both nested contact object and top-level settings
+        const contact = content.settings.contact || {};
+        const email = contact.email || content.settings.email;
+        const phone = contact.phone || content.settings.phone;
+        const address = contact.address || content.settings.address;
 
-            console.log('Contact info updated on page');
-        } else {
-            console.warn('No contact data in settings');
-        }
+        console.log('Contact data resolved:', { email, phone, address });
+
+        if (email) setText('contact-email', `Email: ${email}`);
+        if (phone) setText('contact-phone', `Phone: ${phone}`);
+        if (address) setText('contact-address', address);
+
+        console.log('Contact info updated on page');
     } else {
         console.warn('No settings object in content');
     }
