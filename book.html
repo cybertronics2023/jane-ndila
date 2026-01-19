@@ -36,7 +36,7 @@
     <!-- Booking Hero Section -->
     <section class="hero">
         <div class="hero-image">
-            <img src="images/book.JPG" alt="A welcoming and professional office environment for counselling sessions."
+            <img src="" alt="A welcoming and professional office environment for counselling sessions."
                 class="profile-image">
         </div>
         <div class="container">
@@ -478,14 +478,15 @@
 
                 <div class="footer-contact">
                     <h4>Contact Info</h4>
-                    <p>Email: jandilam77@gmail.com</p>
-                    <p>Phone: +254 721 205 993</p>
-                    <p>Utawala, Nairobi, Kenya.</p>
+                    <p data-dynamic="contact-email">Email: jandilam77@gmail.com</p>
+                    <p data-dynamic="contact-phone">Phone: +254 721 205 993</p>
+                    <p data-dynamic="contact-address">Utawala, Nairobi, Kenya.</p>
                 </div>
             </div>
 
             <div class="footer-bottom">
-                <p>&copy; 2025 Jane Ndila. All rights reserved. | <a href="privacy.html" style="color: #ccc;">Privacy
+                <p>&copy; <span id="current-year">2025</span> Jane Ndila. All rights reserved. | <a href="privacy.html"
+                        style="color: #ccc;">Privacy
                         Policy</a></p>
             </div>
         </div>
@@ -493,6 +494,9 @@
 
     <!-- JavaScript -->
     <script src="script.js"></script>
+    <!-- Supabase & Content Loader -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="content-loader.js" defer></script>
 </body>
 
 </html>
