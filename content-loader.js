@@ -180,6 +180,11 @@ function updateDOM(content) {
         setImage('gallery-hero-image', content.galleryPage.heroImage);
     }
 
+    // --- Privacy Page ---
+    if (content.privacyPage && content.privacyPage.heroImage) {
+        setImage('privacy-hero-image', content.privacyPage.heroImage);
+    }
+
     // --- Projects Page ---
     if (content.projects && document.getElementById('projects-grid')) {
         renderProjects(content.projects);
