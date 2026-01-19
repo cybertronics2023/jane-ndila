@@ -56,7 +56,7 @@
     <section class="section">
         <div class="container">
             <h2 class="section-title">Professional <span>Certifications</span></h2>
-            <div class="qualifications-grid">
+            <div class="qualifications-grid" id="certifications-grid">
                 <!-- Certification 1 -->
                 <div class="qualification-card">
                     <div class="qualification-icon">
@@ -112,7 +112,7 @@
     <section class="section" style="background: var(--white);">
         <div class="container">
             <h2 class="section-title">Key <span>Achievements</span></h2>
-            <div class="benefits-grid">
+            <div class="benefits-grid" id="achievements-grid">
                 <!-- Achievement 1 -->
                 <div class="benefit-item">
                     <div class="benefit-icon">
@@ -223,20 +223,24 @@
 
                 <div class="footer-contact">
                     <h4>Contact Info</h4>
-                    <p>Email: jandilam77@gmail.com</p>
-                    <p>Phone: +254 721 205 993</p>
-                    <p>Utawala, Nairobi, Kenya.</p>
+                    <p data-dynamic="contact-email">Email: jandilam77@gmail.com</p>
+                    <p data-dynamic="contact-phone">Phone: +254 721 205 993</p>
+                    <p data-dynamic="contact-address">Utawala, Nairobi, Kenya.</p>
                 </div>
             </div>
 
             <div class="footer-bottom">
-                <p>&copy; 2025 Jane Ndila. All rights reserved.</p>
+                <p>&copy; <span id="current-year">2025</span> Jane Ndila. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
     <!-- JavaScript -->
+    <!-- JavaScript -->
     <script src="script.js"></script>
+    <!-- Supabase & Content Loader -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="content-loader.js" defer></script>
 </body>
 
 </html>

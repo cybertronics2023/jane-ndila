@@ -250,8 +250,9 @@
                     </div>
                     <div class="featured-video-info">
                         <span class="featured-tag">Featured</span>
-                        <h3>Empowered for Transformation</h3>
-                        <p>Discover the key principles behind lasting personal change and how to unlock your potential
+                        <h3 id="featured-video-title">Empowered for Transformation</h3>
+                        <p id="featured-video-desc">Discover the key principles behind lasting personal change and how
+                            to unlock your potential
                             for growth and healing.</p>
                         <a href="#" class="btn btn-primary">Watch Now</a>
                     </div>
@@ -264,7 +265,7 @@
     <section class="section" style="background: var(--white);">
         <div class="container">
             <h2 class="section-title">All <span>Videos</span></h2>
-            <div class="videos-grid">
+            <div class="videos-grid" id="videos-grid">
                 <!-- Video 1 -->
                 <div class="video-card">
                     <div class="video-thumbnail">
@@ -459,20 +460,24 @@
 
                 <div class="footer-contact">
                     <h4>Contact Info</h4>
-                    <p>Email: jandilam77@gmail.com</p>
-                    <p>Phone: +254 721 205 993</p>
-                    <p>Utawala, Nairobi, Kenya.</p>
+                    <p data-dynamic="contact-email">Email: jandilam77@gmail.com</p>
+                    <p data-dynamic="contact-phone">Phone: +254 721 205 993</p>
+                    <p data-dynamic="contact-address">Utawala, Nairobi, Kenya.</p>
                 </div>
             </div>
 
             <div class="footer-bottom">
-                <p>&copy; 2025 Jane Ndila. All rights reserved.</p>
+                <p>&copy; <span id="current-year">2025</span> Jane Ndila. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
     <!-- JavaScript -->
+    <!-- JavaScript -->
     <script src="script.js"></script>
+    <!-- Supabase & Content Loader -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="content-loader.js" defer></script>
 </body>
 
 </html>

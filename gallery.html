@@ -234,7 +234,7 @@
                 <button class="filter-btn" data-filter="professional">Professional</button>
             </div>
 
-            <div class="gallery-grid">
+            <div class="gallery-grid" id="gallery-grid">
                 <!-- Gallery Item 1 - Featured -->
                 <div class="gallery-item featured" data-category="events">
                     <img src="images/gallery/WhatsApp Image 2025-12-18 at 16.25.59.jpeg" alt="Jane Ndila Event">
@@ -357,14 +357,14 @@
 
                 <div class="footer-contact">
                     <h4>Contact Info</h4>
-                    <p>Email: jandilam77@gmail.com</p>
-                    <p>Phone: +254 721 205 993</p>
-                    <p>Utawala, Nairobi, Kenya.</p>
+                    <p data-dynamic="contact-email">Email: jandilam77@gmail.com</p>
+                    <p data-dynamic="contact-phone">Phone: +254 721 205 993</p>
+                    <p data-dynamic="contact-address">Utawala, Nairobi, Kenya.</p>
                 </div>
             </div>
 
             <div class="footer-bottom">
-                <p>&copy; 2025 Jane Ndila. All rights reserved.</p>
+                <p>&copy; <span id="current-year">2025</span> Jane Ndila. All rights reserved.</p>
             </div>
         </div>
     </footer>
@@ -376,7 +376,10 @@
     </div>
 
     <!-- JavaScript -->
+    <!-- JavaScript -->
     <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="content-loader.js" defer></script>
     <script>
         // Gallery Filter
         document.querySelectorAll('.filter-btn').forEach(btn => {

@@ -39,14 +39,16 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-image">
-            <img src="images/hero-portrait.jpg" alt="Jane Ndila - Psychologist & Counsellor" class="profile-image">
+            <img src="images/hero-portrait.jpg" alt="Jane Ndila - Psychologist & Counsellor" class="profile-image"
+                id="home-hero-image">
         </div>
         <div class="container">
             <div class="hero-content">
                 <div class="hero-text">
-                    <h1 class="hero-title">Jane Ndila</h1>
-                    <h2 class="hero-subtitle">Addiction Counsellor | Executive Coach | Trainer</h2>
-                    <p class="hero-description">
+                    <h1 class="hero-title" id="home-hero-title">Jane Ndila</h1>
+                    <h2 class="hero-subtitle" id="home-hero-subtitle">Addiction Counsellor | Executive Coach | Trainer
+                    </h2>
+                    <p class="hero-description" id="home-hero-description">
                         "Empowered for Transformation"
                     </p>
                     <div class="hero-buttons">
@@ -144,12 +146,13 @@
         <div class="container">
             <div class="hero-content">
                 <div class="hero-image">
-                    <img src="images/Janes-approach.JPG" alt="Jane's Approach" class="profile-image">
+                    <img src="images/Janes-approach.JPG" alt="Jane's Approach" class="profile-image"
+                        id="home-approach-image">
                 </div>
 
                 <div class="hero-text">
-                    <h2 class="section-title">My <span>Approach</span></h2>
-                    <p class="hero-description">
+                    <h2 class="section-title" id="home-approach-title">My <span>Approach</span></h2>
+                    <p class="hero-description" id="home-approach-description">
                         "Healing begins with listening." I believe in creating a safe, non-judgmental space
                         where you can explore your thoughts and feelings openly. My approach combines
                         evidence-based techniques with genuine compassion and understanding.
@@ -184,20 +187,24 @@
 
                 <div class="footer-contact">
                     <h4>Contact Info</h4>
-                    <p>Email: jandilam77@gmail.com</p>
-                    <p>Phone: +254 721 205 993</p>
-                    <p>Utawala, Nairobi, Kenya.</p>
+                    <p data-dynamic="contact-email">Email: jandilam77@gmail.com</p>
+                    <p data-dynamic="contact-phone">Phone: +254 721 205 993</p>
+                    <p data-dynamic="contact-address">Utawala, Nairobi, Kenya.</p>
                 </div>
             </div>
 
             <div class="footer-bottom">
-                <p>&copy; 2025 Jane Ndila. All rights reserved.</p>
+                <p>&copy; <span id="current-year"></span> Jane Ndila. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
     <!-- JavaScript -->
+    <!-- JavaScript -->
     <script src="script.js"></script>
+    <!-- Supabase & Content Loader -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="content-loader.js" defer></script>
 </body>
 
 </html>
