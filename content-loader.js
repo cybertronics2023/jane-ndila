@@ -139,8 +139,45 @@ function updateDOM(content) {
     }
 
     // --- Services Page ---
-    if (content.services && document.getElementById('detailed-services-grid')) {
-        renderDetailedServices(content.services.items);
+    if (content.services) {
+        // Hero image
+        if (content.services.heroImage) {
+            setImage('services-hero-image', content.services.heroImage);
+        }
+        // Grid content
+        if (content.services.items && document.getElementById('detailed-services-grid')) {
+            renderDetailedServices(content.services.items);
+        }
+    }
+
+    // --- Contact Page ---
+    if (content.contact && content.contact.heroImage) {
+        setImage('contact-hero-image', content.contact.heroImage);
+    }
+
+    // --- Book Page ---
+    if (content.book && content.book.heroImage) {
+        setImage('book-hero-image', content.book.heroImage);
+    }
+
+    // --- Videos Page ---
+    if (content.videos && content.videos.heroImage) {
+        setImage('videos-hero-image', content.videos.heroImage);
+    }
+
+    // --- Projects Page ---
+    if (content.projectsPage && content.projectsPage.heroImage) {
+        setImage('projects-hero-image', content.projectsPage.heroImage);
+    }
+
+    // --- Portfolio Page ---
+    if (content.portfolioPage && content.portfolioPage.heroImage) {
+        setImage('portfolio-hero-image', content.portfolioPage.heroImage);
+    }
+
+    // --- Gallery Page ---
+    if (content.galleryPage && content.galleryPage.heroImage) {
+        setImage('gallery-hero-image', content.galleryPage.heroImage);
     }
 
     // --- Projects Page ---
