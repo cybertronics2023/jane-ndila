@@ -1,17 +1,23 @@
 // content-loader.js
 // Handles fetching content from Supabase and updating the DOM
 
-// Configuration - REPLACE THESE WITH YOUR SUPABASE CREDENTIALS
+// Configuration
 const SUPABASE_URL = 'https://avezwecbtvtkbtctsbzh.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF2ZXp3ZWNidHZ0a2J0Y3RzYnpoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg4MTk1MDEsImV4cCI6MjA4NDM5NTUwMX0.qa-Tnzl37ts25QAtQ_ek6BljCo-ndZjS-2rD0T03bhM';
 
-// Initialize Supabase Client
+// Supabase client will be initialized when ready
 let supabaseClient = null;
-if (typeof supabase !== 'undefined' && SUPABASE_URL !== 'YOUR_SUPABASE_URL') {
-    supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-    console.log('Supabase client initialized');
-} else {
-    console.warn('Supabase not configured. Content will not be loaded from cloud.');
+
+// Initialize Supabase client - called when DOM is ready
+function initSupabase() {
+    if (typeof supabase !== 'undefined') {
+        supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        console.log('Supabase client initialized successfully');
+        return true;
+    } else {
+        console.error('Supabase SDK not loaded! Check if the CDN script is included before content-loader.js');
+        return false;
+    }
 }
 
 // Main function to load content
@@ -301,8 +307,24 @@ function updateCopyrightYear() {
     }
 }
 
-// Run on load
-document.addEventListener('DOMContentLoaded', () => {
-    loadSiteContent();
+// Main initialization function
+function init() {
+    console.log('Content loader initializing...');
+
+    // Initialize Supabase client
+    if (initSupabase()) {
+        // Load content from Supabase
+        loadSiteContent();
+    }
+
+    // Update copyright year
     updateCopyrightYear();
-});
+}
+
+// Run on DOM ready or immediately if already loaded
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+} else {
+    // DOM already loaded
+    init();
+}
