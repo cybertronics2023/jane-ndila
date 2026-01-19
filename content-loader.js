@@ -120,11 +120,12 @@ function updateDOM(content) {
         console.log('Settings found:', content.settings);
         setText('footer-brand-tagline', content.settings.tagline);
 
-        // Get contact info - check both nested contact object and top-level settings
+        // Get contact info - prefer top-level settings (always updated by Admin)
+        // Fall back to nested contact object for backwards compatibility
         const contact = content.settings.contact || {};
-        const email = contact.email || content.settings.email;
-        const phone = contact.phone || content.settings.phone;
-        const address = contact.address || content.settings.address;
+        const email = content.settings.email || contact.email;
+        const phone = content.settings.phone || contact.phone;
+        const address = content.settings.address || contact.address;
 
         console.log('Contact data resolved:', { email, phone, address });
 
