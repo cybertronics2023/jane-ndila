@@ -108,13 +108,26 @@ function updateDOM(content) {
     }
 
     // --- Settings (Contact) ---
+    console.log('Checking settings:', content.settings);
     if (content.settings) {
+        console.log('Settings found, contact:', content.settings.contact);
         setText('footer-brand-tagline', content.settings.tagline);
         if (content.settings.contact) {
-            setText('contact-email', `Email: ${content.settings.contact.email}`);
-            setText('contact-phone', `Phone: ${content.settings.contact.phone}`);
-            setText('contact-address', content.settings.contact.address);
+            const email = content.settings.contact.email;
+            const phone = content.settings.contact.phone;
+            const address = content.settings.contact.address;
+            console.log('Contact data:', { email, phone, address });
+
+            setText('contact-email', `Email: ${email}`);
+            setText('contact-phone', `Phone: ${phone}`);
+            setText('contact-address', address);
+
+            console.log('Contact info updated on page');
+        } else {
+            console.warn('No contact data in settings');
         }
+    } else {
+        console.warn('No settings object in content');
     }
 
     // --- Services Page ---
