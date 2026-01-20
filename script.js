@@ -59,28 +59,6 @@ window.addEventListener('scroll', () => {
     }
 });
 
-// Update active navigation link based on current page
-function setActiveNavLink() {
-    const path = window.location.pathname;
-    const page = path.split('/').pop() || 'index.html';
-    const navLinks = document.querySelectorAll('.nav-link');
-
-    // Normalize page name
-    const currentPage = (page === '' || page === '/') ? 'index.html' : page;
-
-    navLinks.forEach(link => {
-        link.classList.remove('active');
-        const href = link.getAttribute('href');
-
-        // Robust matching
-        if (href === currentPage ||
-            (currentPage === 'index.html' && (href === './' || href === '/')) ||
-            href === './' + currentPage) {
-            link.classList.add('active');
-        }
-    });
-}
-
 // Testimonials slider functionality
 function initTestimonialsSlider() {
     const testimonials = document.querySelectorAll('.testimonial-item');
@@ -730,8 +708,7 @@ function initBookingPage() {
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Jane Ndila Psychology Website initialized');
 
-    // Set active navigation link
-    setActiveNavLink();
+    // Set active navigation link (handled by static HTML now)
 
     // Initialize all components
     initTestimonialsSlider();
