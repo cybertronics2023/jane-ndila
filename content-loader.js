@@ -205,7 +205,23 @@ function updateDOM(content) {
         if (content.videos.featured) {
             setText('featured-video-title', content.videos.featured.title);
             setText('featured-video-desc', content.videos.featured.description);
-            // Handle video URL if needed (iframe src)
+            // Handle featured video playback
+            const featuredTag = document.querySelector('.featured-video-player');
+            if (featuredTag && content.videos.featured.url) {
+                const isDirectFile = content.videos.featured.url.endsWith('.mp4') || content.videos.featured.url.startsWith('data:video');
+                featuredTag.onclick = () => {
+                    if (isDirectFile) {
+                        openVideoModal(content.videos.featured.url);
+                    } else {
+                        window.open(content.videos.featured.url, '_blank');
+                    }
+                };
+                // Set thumbnail if available
+                if (content.videos.featured.thumbnail) {
+                    featuredTag.style.backgroundImage = `url(${content.videos.featured.thumbnail})`;
+                    featuredTag.style.backgroundSize = 'cover';
+                }
+            }
         }
         if (content.videos.items && document.getElementById('videos-grid')) {
             renderVideos(content.videos.items);
@@ -301,13 +317,92 @@ function renderCertifications(certifications) {
 function renderVideos(videos) {
     const container = document.getElementById('videos-grid');
     if (!container) return;
-    container.innerHTML = videos.map(v => `
+
+    container.innerHTML = videos.map(v => {
+        const isDirectFile = v.url && (v.url.endsWith('.mp4') || v.url.startsWith('data:video'));
+        const thumb = v.thumbnail || 'images/video-placeholder.jpg'; // Fallback
+
+        return `
         <div class="video-card">
-            <h4>${v.title}</h4>
-            <p>${v.duration} • ${v.date || ''}</p>
+            <div class="video-thumbnail" style="background-image: url('${thumb}'); background-size: cover; background-position: center; cursor: pointer;" onclick="playVideo('${v.url}')">
+                <div class="play-button">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z" />
+                    </svg>
+                </div>
+            </div>
+            <div class="video-info">
+                <h3 class="video-title">${v.title}</h3>
+                <p class="video-description">${v.description || ''}</p>
+                <div class="video-meta">
+                    <span><svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z" /></svg> ${v.duration || 'N/A'}</span>
+                    <span><svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM9 10H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm-8 4H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2z" /></svg> ${v.date || ''}</span>
+                </div>
+            </div>
         </div>
-    `).join('');
+    `}).join('');
 }
+
+// Global video playing functions
+window.playVideo = (url) => {
+    if (!url) return;
+    const isDirectFile = url.endsWith('.mp4') || url.startsWith('data:video');
+    if (isDirectFile) {
+        openVideoModal(url);
+    } else {
+        window.open(url, '_blank');
+    }
+};
+
+function openVideoModal(url) {
+    let modal = document.getElementById('video-modal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'video-modal';
+        modal.className = 'modal-overlay';
+        modal.innerHTML = `
+            <div class="modal-content video-modal-content">
+                <span class="close-modal" onclick="closeVideoModal()">&times;</span>
+                <video id="modal-video-player" width="100%" controls autoplay>
+                    <source src="" type="video/mp4">
+                </video>
+            </div>
+        `;
+        document.body.appendChild(modal);
+
+        // Add basic styles if not present
+        if (!document.getElementById('video-modal-styles')) {
+            const style = document.createElement('style');
+            style.id = 'video-modal-styles';
+            style.textContent = `
+                .modal-overlay { position: fixed; top: 0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.9); display: none; alignt-items:center; justify-content:center; z-index: 9999; }
+                .modal-overlay.active { display: flex; }
+                .video-modal-content { position: relative; width: 90%; max-width: 1000px; }
+                .close-modal { position: absolute; top: -40px; right: 0; color: white; font-size: 30px; cursor: pointer; }
+            `;
+            document.head.appendChild(style);
+        }
+    }
+
+    const video = modal.querySelector('video');
+    video.src = url;
+    modal.classList.add('active');
+
+    // Close on click outside
+    modal.onclick = (e) => {
+        if (e.target === modal) closeVideoModal();
+    };
+}
+
+window.closeVideoModal = () => {
+    const modal = document.getElementById('video-modal');
+    if (modal) {
+        const video = modal.querySelector('video');
+        video.pause();
+        video.src = "";
+        modal.classList.remove('active');
+    }
+};
 
 function renderGallery(items) {
     const container = document.getElementById('gallery-grid');
