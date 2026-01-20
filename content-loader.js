@@ -111,6 +111,10 @@ function updateDOM(content) {
         }
         if (content.about.philosophy) {
             setText('about-philosophy-quote', content.about.philosophy.quote);
+            setImage('about-philosophy-image', content.about.philosophy.image);
+            if (content.about.philosophy.points && document.getElementById('philosophy-points')) {
+                renderPhilosophyPoints(content.about.philosophy.points);
+            }
         }
     }
 
@@ -255,6 +259,18 @@ function updateDOM(content) {
     if (content.faq && document.getElementById('faq-grid')) {
         renderFAQ(content.faq);
     }
+}
+
+function renderPhilosophyPoints(points) {
+    const container = document.getElementById('philosophy-points');
+    if (!container || !points) return;
+
+    container.innerHTML = points.map(point => `
+        <div class="approach-point">
+            <h4>${point.title}</h4>
+            <p>${point.description}</p>
+        </div>
+    `).join('');
 }
 
 function renderDetailedServices(services) {
