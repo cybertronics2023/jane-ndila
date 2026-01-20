@@ -65,14 +65,17 @@ function setActiveNavLink() {
     const page = path.split('/').pop() || 'index.html';
     const navLinks = document.querySelectorAll('.nav-link');
 
+    // Normalize page name
+    const currentPage = (page === '' || page === '/') ? 'index.html' : page;
+
     navLinks.forEach(link => {
         link.classList.remove('active');
         const href = link.getAttribute('href');
 
-        // Match exact page or index.html for home
-        if (href === page || (page === 'index.html' && (href === './' || href === '/'))) {
-            link.classList.add('active');
-        } else if (page === '' && (href === 'index.html' || href === './' || href === '/')) {
+        // Robust matching
+        if (href === currentPage ||
+            (currentPage === 'index.html' && (href === './' || href === '/')) ||
+            href === './' + currentPage) {
             link.classList.add('active');
         }
     });
