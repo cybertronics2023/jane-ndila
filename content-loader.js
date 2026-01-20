@@ -203,24 +203,33 @@ function updateDOM(content) {
     // --- Videos Page ---
     if (content.videos) {
         if (content.videos.featured) {
-            setText('featured-video-title', content.videos.featured.title);
-            setText('featured-video-desc', content.videos.featured.description);
-            // Handle featured video playback
-            const featuredTag = document.querySelector('.featured-video-player');
-            if (featuredTag && content.videos.featured.url) {
-                const isDirectFile = content.videos.featured.url.endsWith('.mp4') || content.videos.featured.url.startsWith('data:video');
-                featuredTag.onclick = () => {
-                    if (isDirectFile) {
-                        openVideoModal(content.videos.featured.url);
+            const featuredSection = document.querySelector('.featured-video')?.closest('.section');
+            if (content.videos.featured.url) {
+                if (featuredSection) featuredSection.style.display = 'block';
+                setText('featured-video-title', content.videos.featured.title);
+                setText('featured-video-desc', content.videos.featured.description);
+                // Handle featured video playback
+                const featuredTag = document.querySelector('.featured-video-player');
+                if (featuredTag) {
+                    const isDirectFile = content.videos.featured.url.endsWith('.mp4') || content.videos.featured.url.startsWith('data:video');
+                    featuredTag.onclick = () => {
+                        if (isDirectFile) {
+                            openVideoModal(content.videos.featured.url);
+                        } else {
+                            window.open(content.videos.featured.url, '_blank');
+                        }
+                    };
+                    // Set thumbnail if available
+                    if (content.videos.featured.thumbnail) {
+                        featuredTag.style.backgroundImage = `url(${content.videos.featured.thumbnail})`;
+                        featuredTag.style.backgroundSize = 'cover';
                     } else {
-                        window.open(content.videos.featured.url, '_blank');
+                        featuredTag.style.backgroundImage = 'none';
                     }
-                };
-                // Set thumbnail if available
-                if (content.videos.featured.thumbnail) {
-                    featuredTag.style.backgroundImage = `url(${content.videos.featured.thumbnail})`;
-                    featuredTag.style.backgroundSize = 'cover';
                 }
+            } else {
+                // Hide the whole featured section if no URL
+                if (featuredSection) featuredSection.style.display = 'none';
             }
         }
         if (content.videos.items && document.getElementById('videos-grid')) {
