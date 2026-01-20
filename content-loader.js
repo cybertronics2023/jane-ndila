@@ -126,12 +126,21 @@ function updateDOM(content) {
         const email = content.settings.email || contact.email;
         const phone = content.settings.phone || contact.phone;
         const address = content.settings.address || contact.address;
+        const building = content.settings.building || (content.settings.contact ? content.settings.contact.building : null);
 
-        console.log('Contact data resolved:', { email, phone, address });
+        console.log('Contact data resolved:', { email, phone, address, building });
 
         if (email) setText('contact-email', `Email: ${email}`);
         if (phone) setText('contact-phone', `Phone: ${phone}`);
         if (address) setText('contact-address', address);
+        if (building) setText('contact-building', building);
+
+        // Business Hours
+        if (content.settings.hours) {
+            if (content.settings.hours.weekday) setText('hours-weekday', content.settings.hours.weekday);
+            if (content.settings.hours.saturday) setText('hours-saturday', content.settings.hours.saturday);
+            if (content.settings.hours.sunday) setText('hours-sunday', content.settings.hours.sunday);
+        }
 
         console.log('Contact info updated on page');
     } else {
