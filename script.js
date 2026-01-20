@@ -31,14 +31,14 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         e.preventDefault();
         const targetId = this.getAttribute('href');
         if (targetId === '#') return;
-        
+
         const target = document.querySelector(targetId);
         if (target) {
             // Calculate offset for fixed header
             const header = document.querySelector('.header');
             const headerHeight = header ? header.offsetHeight : 0;
             const targetPosition = target.offsetTop - headerHeight;
-            
+
             window.scrollTo({
                 top: targetPosition,
                 behavior: 'smooth'
@@ -61,20 +61,18 @@ window.addEventListener('scroll', () => {
 
 // Update active navigation link based on current page
 function setActiveNavLink() {
-    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    const path = window.location.pathname;
+    const page = path.split('/').pop() || 'index.html';
     const navLinks = document.querySelectorAll('.nav-link');
-    
+
     navLinks.forEach(link => {
         link.classList.remove('active');
-        
-        // Handle index.html and empty paths
-        if (currentPage === 'index.html' || currentPage === '') {
-            if (link.getAttribute('href') === 'index.html' || link.getAttribute('href') === './' || link.getAttribute('href') === '/') {
-                link.classList.add('active');
-            }
-        } 
-        // Handle other pages
-        else if (link.getAttribute('href') === currentPage) {
+        const href = link.getAttribute('href');
+
+        // Match exact page or index.html for home
+        if (href === page || (page === 'index.html' && (href === './' || href === '/'))) {
+            link.classList.add('active');
+        } else if (page === '' && (href === 'index.html' || href === './' || href === '/')) {
             link.classList.add('active');
         }
     });
@@ -86,11 +84,11 @@ function initTestimonialsSlider() {
     const prevBtn = document.querySelector('.testimonial-prev');
     const nextBtn = document.querySelector('.testimonial-next');
     const dotsContainer = document.querySelector('.testimonial-dots');
-    
+
     if (testimonials.length === 0) return;
-    
+
     let currentTestimonial = 0;
-    
+
     // Create dots if container exists
     if (dotsContainer) {
         testimonials.forEach((_, index) => {
@@ -101,33 +99,33 @@ function initTestimonialsSlider() {
             dotsContainer.appendChild(dot);
         });
     }
-    
+
     function showTestimonial(index) {
         // Hide all testimonials
         testimonials.forEach(testimonial => {
             testimonial.style.display = 'none';
             testimonial.classList.remove('active');
         });
-        
+
         // Remove active class from all dots
         if (dotsContainer) {
             document.querySelectorAll('.testimonial-dot').forEach(dot => {
                 dot.classList.remove('active');
             });
         }
-        
+
         // Show current testimonial
         testimonials[index].style.display = 'block';
         testimonials[index].classList.add('active');
-        
+
         // Activate current dot
         if (dotsContainer && dotsContainer.children[index]) {
             dotsContainer.children[index].classList.add('active');
         }
-        
+
         currentTestimonial = index;
     }
-    
+
     // Navigation buttons
     if (prevBtn) {
         prevBtn.addEventListener('click', () => {
@@ -135,27 +133,27 @@ function initTestimonialsSlider() {
             showTestimonial(currentTestimonial);
         });
     }
-    
+
     if (nextBtn) {
         nextBtn.addEventListener('click', () => {
             currentTestimonial = (currentTestimonial + 1) % testimonials.length;
             showTestimonial(currentTestimonial);
         });
     }
-    
+
     // Auto-rotate testimonials every 7 seconds
     let testimonialInterval = setInterval(() => {
         currentTestimonial = (currentTestimonial + 1) % testimonials.length;
         showTestimonial(currentTestimonial);
     }, 7000);
-    
+
     // Pause auto-rotation on hover
     const testimonialContainer = document.querySelector('.testimonials-container');
     if (testimonialContainer) {
         testimonialContainer.addEventListener('mouseenter', () => {
             clearInterval(testimonialInterval);
         });
-        
+
         testimonialContainer.addEventListener('mouseleave', () => {
             testimonialInterval = setInterval(() => {
                 currentTestimonial = (currentTestimonial + 1) % testimonials.length;
@@ -163,7 +161,7 @@ function initTestimonialsSlider() {
             }, 7000);
         });
     }
-    
+
     // Initialize first testimonial
     showTestimonial(0);
 }
@@ -171,33 +169,33 @@ function initTestimonialsSlider() {
 // Contact Form Specific Functions
 function initContactForm() {
     const contactForm = document.getElementById('contactForm');
-    
+
     if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
+        contactForm.addEventListener('submit', function (e) {
             e.preventDefault();
-            
+
             // Get form data
             const formData = new FormData(this);
             const data = Object.fromEntries(formData);
-            
+
             // Validate form
             if (!validateContactForm(data)) {
                 return;
             }
-            
+
             // Show loading state
             const submitBtn = this.querySelector('button[type="submit"]');
             const originalText = submitBtn.textContent;
             submitBtn.textContent = 'Sending...';
             submitBtn.disabled = true;
-            
+
             // Simulate form submission (replace with actual API call)
             setTimeout(() => {
                 showNotification('Thank you for your message! I will get back to you within 24 hours.', 'success');
                 contactForm.reset();
                 submitBtn.textContent = originalText;
                 submitBtn.disabled = false;
-                
+
                 // Track form submission (optional)
                 if (typeof gtag !== 'undefined') {
                     gtag('event', 'contact_form_submit', {
@@ -216,39 +214,39 @@ function validateContactForm(data) {
         showNotification('Please enter your full name.', 'error');
         return false;
     }
-    
+
     if (!data.email || !data.email.trim()) {
         showNotification('Please enter your email address.', 'error');
         return false;
     }
-    
+
     if (!isValidEmail(data.email)) {
         showNotification('Please enter a valid email address.', 'error');
         return false;
     }
-    
+
     if (!data.subject) {
         showNotification('Please select a subject for your message.', 'error');
         return false;
     }
-    
+
     if (!data.message || !data.message.trim()) {
         showNotification('Please enter your message.', 'error');
         return false;
     }
-    
+
     if (!data.consent) {
         showNotification('Please acknowledge the consent statement.', 'error');
         return false;
     }
-    
+
     return true;
 }
 
 // Booking Form Specific Functions
 function initBookingForm() {
     const bookingForm = document.getElementById('bookingForm');
-    
+
     if (bookingForm) {
         // Set minimum date to today
         const dateInput = document.getElementById('preferredDate');
@@ -260,31 +258,31 @@ function initBookingForm() {
             dateInput.min = `${yyyy}-${mm}-${dd}`;
         }
 
-        bookingForm.addEventListener('submit', function(e) {
+        bookingForm.addEventListener('submit', function (e) {
             e.preventDefault();
-            
+
             // Get form data
             const formData = new FormData(this);
             const data = Object.fromEntries(formData);
-            
+
             // Validate form
             if (!validateBookingForm(data)) {
                 return;
             }
-            
+
             // Show loading state
             const submitBtn = this.querySelector('button[type="submit"]');
             const originalText = submitBtn.innerHTML;
             submitBtn.innerHTML = '<svg viewBox="0 0 24 24" class="btn-icon"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg> Processing...';
             submitBtn.disabled = true;
-            
+
             // Simulate form submission
             setTimeout(() => {
                 showNotification('Booking request submitted successfully! You will receive a confirmation email within 2 hours.', 'success');
                 bookingForm.reset();
                 submitBtn.innerHTML = originalText;
                 submitBtn.disabled = false;
-                
+
                 // Track booking submission
                 if (typeof gtag !== 'undefined') {
                     gtag('event', 'booking_form_submit', {
@@ -298,7 +296,7 @@ function initBookingForm() {
         // Service type change handler
         const serviceTypeSelect = document.getElementById('serviceType');
         if (serviceTypeSelect) {
-            serviceTypeSelect.addEventListener('change', function() {
+            serviceTypeSelect.addEventListener('change', function () {
                 updateSessionInfo(this.value);
             });
         }
@@ -308,44 +306,44 @@ function initBookingForm() {
 function validateBookingForm(data) {
     // Basic validation
     const requiredFields = ['fullName', 'email', 'phone', 'serviceType', 'sessionType', 'preferredDate', 'preferredTime', 'concerns'];
-    
+
     for (const field of requiredFields) {
         if (!data[field] || !data[field].toString().trim()) {
             showNotification(`Please fill in the ${field.replace(/([A-Z])/g, ' $1').toLowerCase()} field.`, 'error');
             return false;
         }
     }
-    
+
     if (!isValidEmail(data.email)) {
         showNotification('Please enter a valid email address.', 'error');
         return false;
     }
-    
+
     if (!data.privacyPolicy || !data.cancellationPolicy) {
         showNotification('Please agree to the privacy and cancellation policies.', 'error');
         return false;
     }
-    
+
     // Date validation
     const selectedDate = new Date(data.preferredDate);
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    
+
     if (selectedDate < today) {
         showNotification('Please select a future date for your session.', 'error');
         return false;
     }
-    
+
     return true;
 }
 
 function updateSessionInfo(serviceType) {
     const sessionInfo = document.querySelector('.session-info');
     if (!sessionInfo) return;
-    
+
     const durationSpan = sessionInfo.querySelector('.info-item:nth-child(1) span');
     const priceSpan = sessionInfo.querySelector('.info-item:nth-child(2) span');
-    
+
     const sessionData = {
         'individual': { duration: '50-60 minutes', price: 'KSh 3,500' },
         'couples': { duration: '75-90 minutes', price: 'KSh 5,000' },
@@ -354,9 +352,9 @@ function updateSessionInfo(serviceType) {
         'trauma': { duration: '60-75 minutes', price: 'KSh 4,000' },
         'consultation': { duration: '30 minutes', price: 'FREE' }
     };
-    
+
     const data = sessionData[serviceType] || { duration: '50-90 minutes', price: 'KSh 3,500 - 5,000' };
-    
+
     if (durationSpan) durationSpan.textContent = data.duration;
     if (priceSpan) priceSpan.textContent = data.price;
 }
@@ -364,10 +362,10 @@ function updateSessionInfo(serviceType) {
 // FAQ Accordion Functionality
 function initFAQAccordion() {
     const faqItems = document.querySelectorAll('.faq-item');
-    
+
     faqItems.forEach(item => {
         const question = item.querySelector('.faq-question');
-        
+
         if (question) {
             question.addEventListener('click', () => {
                 // Close all other items
@@ -376,7 +374,7 @@ function initFAQAccordion() {
                         otherItem.classList.remove('active');
                     }
                 });
-                
+
                 // Toggle current item
                 item.classList.toggle('active');
             });
@@ -398,7 +396,7 @@ function showNotification(message, type = 'info') {
     if (existingNotification) {
         existingNotification.remove();
     }
-    
+
     // Create notification element
     const notification = document.createElement('div');
     notification.className = `notification notification-${type}`;
@@ -406,7 +404,7 @@ function showNotification(message, type = 'info') {
         <span class="notification-message">${message}</span>
         <button class="notification-close">&times;</button>
     `;
-    
+
     // Add styles if not already added
     if (!document.querySelector('#notification-styles')) {
         const styles = document.createElement('style');
@@ -451,17 +449,17 @@ function showNotification(message, type = 'info') {
         `;
         document.head.appendChild(styles);
     }
-    
+
     // Add to page
     document.body.appendChild(notification);
-    
+
     // Auto-remove after 5 seconds
     const autoRemove = setTimeout(() => {
         if (notification.parentNode) {
             notification.remove();
         }
     }, 5000);
-    
+
     // Close button functionality
     const closeBtn = notification.querySelector('.notification-close');
     if (closeBtn) {
@@ -477,14 +475,14 @@ function showNotification(message, type = 'info') {
 // Service card animations
 function initServiceAnimations() {
     const serviceCards = document.querySelectorAll('.service-card');
-    
+
     if (serviceCards.length === 0) return;
-    
+
     const observerOptions = {
         threshold: 0.1,
         rootMargin: '0px 0px -50px 0px'
     };
-    
+
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -493,7 +491,7 @@ function initServiceAnimations() {
             }
         });
     }, observerOptions);
-    
+
     serviceCards.forEach(card => {
         card.style.opacity = '0';
         card.style.transform = 'translateY(20px)';
@@ -509,7 +507,7 @@ function initBackToTop() {
     backToTop.className = 'back-to-top';
     backToTop.setAttribute('aria-label', 'Back to top');
     backToTop.style.display = 'none';
-    
+
     // Add styles if not already added
     if (!document.querySelector('#back-to-top-styles')) {
         const styles = document.createElement('style');
@@ -549,9 +547,9 @@ function initBackToTop() {
         `;
         document.head.appendChild(styles);
     }
-    
+
     document.body.appendChild(backToTop);
-    
+
     // Show/hide based on scroll position
     window.addEventListener('scroll', () => {
         if (window.scrollY > 300) {
@@ -562,7 +560,7 @@ function initBackToTop() {
             backToTop.classList.remove('visible');
         }
     });
-    
+
     // Scroll to top functionality
     backToTop.addEventListener('click', () => {
         window.scrollTo({
@@ -575,9 +573,9 @@ function initBackToTop() {
 // Image lazy loading
 function initLazyLoading() {
     const images = document.querySelectorAll('img[data-src]');
-    
+
     if (images.length === 0) return;
-    
+
     const imageObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -588,20 +586,20 @@ function initLazyLoading() {
             }
         });
     });
-    
+
     images.forEach(img => imageObserver.observe(img));
 }
 
 // Page load animations
 function initPageAnimations() {
     const elementsToAnimate = document.querySelectorAll('.hero-text, .section-title, .service-card, .qualification-card');
-    
+
     elementsToAnimate.forEach((element, index) => {
         if (element) {
             element.style.opacity = '0';
             element.style.transform = 'translateY(30px)';
             element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-            
+
             setTimeout(() => {
                 element.style.opacity = '1';
                 element.style.transform = 'translateY(0)';
@@ -635,9 +633,9 @@ function initPrivacyPage() {
         `;
         backToTop.setAttribute('aria-label', 'Back to top');
         backToTop.style.display = 'none';
-        
+
         document.body.appendChild(backToTop);
-        
+
         // Show/hide back to top button
         window.addEventListener('scroll', () => {
             if (window.scrollY > 500) {
@@ -646,7 +644,7 @@ function initPrivacyPage() {
                 backToTop.style.display = 'none';
             }
         });
-        
+
         // Scroll to top functionality
         backToTop.addEventListener('click', () => {
             window.scrollTo({
@@ -655,20 +653,20 @@ function initPrivacyPage() {
             });
         });
     }
-    
+
     // Add smooth scrolling for anchor links within the page
     document.querySelectorAll('.privacy-content a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
             const targetId = this.getAttribute('href');
             if (targetId === '#') return;
-            
+
             const target = document.querySelector(targetId);
             if (target) {
                 const header = document.querySelector('.header');
                 const headerHeight = header ? header.offsetHeight : 0;
                 const targetPosition = target.offsetTop - headerHeight - 20;
-                
+
                 window.scrollTo({
                     top: targetPosition,
                     behavior: 'smooth'
@@ -676,7 +674,7 @@ function initPrivacyPage() {
             }
         });
     });
-    
+
     // Print functionality
     const printButton = document.createElement('button');
     printButton.className = 'btn btn-secondary';
@@ -688,7 +686,7 @@ function initPrivacyPage() {
     `;
     printButton.style.marginTop = '2rem';
     printButton.addEventListener('click', () => window.print());
-    
+
     const privacyHero = document.querySelector('.privacy-hero-content');
     if (privacyHero) {
         privacyHero.appendChild(printButton);
@@ -699,7 +697,7 @@ function initPrivacyPage() {
 function initContactPage() {
     initContactForm();
     initFAQAccordion();
-    
+
     // Format phone numbers on page
     document.querySelectorAll('a[href^="tel:"]').forEach(link => {
         const phone = link.getAttribute('href').replace('tel:', '');
@@ -712,7 +710,7 @@ function initContactPage() {
 // Initialize booking page specific features
 function initBookingPage() {
     initBookingForm();
-    
+
     // Pre-fill service type from URL parameters
     const urlParams = new URLSearchParams(window.location.search);
     const serviceParam = urlParams.get('service');
@@ -728,33 +726,33 @@ function initBookingPage() {
 // Initialize everything when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Jane Ndila Psychology Website initialized');
-    
+
     // Set active navigation link
     setActiveNavLink();
-    
+
     // Initialize all components
     initTestimonialsSlider();
     initServiceAnimations();
     initBackToTop();
     initLazyLoading();
     initPageAnimations();
-    
+
     // Initialize specific page features
-    if (window.location.pathname.includes('contact.html') || 
+    if (window.location.pathname.includes('contact.html') ||
         document.querySelector('.contact-hero')) {
         initContactPage();
     }
-    
-    if (window.location.pathname.includes('book.html') || 
+
+    if (window.location.pathname.includes('book.html') ||
         document.querySelector('.booking-hero')) {
         initBookingPage();
     }
-    
-    if (window.location.pathname.includes('privacy.html') || 
+
+    if (window.location.pathname.includes('privacy.html') ||
         document.querySelector('.privacy-hero')) {
         initPrivacyPage();
     }
-    
+
     // Add loading class to body for initial animations
     document.body.classList.add('loaded');
 });
@@ -774,7 +772,7 @@ window.addEventListener('load', () => {
 });
 
 // Handle page visibility changes (for tab switching)
-document.addEventListener('visibilitychange', function() {
+document.addEventListener('visibilitychange', function () {
     if (document.hidden) {
         console.log('Page is now hidden');
     } else {
@@ -787,13 +785,13 @@ window.addEventListener('beforeunload', function (e) {
     // Check if any forms have been modified
     const forms = document.querySelectorAll('form');
     let hasUnsavedChanges = false;
-    
+
     forms.forEach(form => {
         if (form.classList.contains('modified')) {
             hasUnsavedChanges = true;
         }
     });
-    
+
     if (hasUnsavedChanges) {
         e.preventDefault();
         e.returnValue = 'You have unsaved changes. Are you sure you want to leave?';
@@ -802,11 +800,11 @@ window.addEventListener('beforeunload', function (e) {
 
 // Mark forms as modified when changed
 document.querySelectorAll('form').forEach(form => {
-    form.addEventListener('change', function() {
+    form.addEventListener('change', function () {
         this.classList.add('modified');
     });
-    
-    form.addEventListener('submit', function() {
+
+    form.addEventListener('submit', function () {
         this.classList.remove('modified');
     });
 });
